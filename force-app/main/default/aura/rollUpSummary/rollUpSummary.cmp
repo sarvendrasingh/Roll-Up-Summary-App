@@ -1,0 +1,119 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" controller="RollUpSummary">
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:method name='callChildSave' action="{!c.save}" />
+    <aura:attribute name="updateRecord" type="boolean" default="false" />
+    <aura:attribute name="recordId" type="string" default="" />
+
+    <aura:attribute name="parent" type="Aura.Component"/>
+    <aura:attribute name="isEdit" type="boolean"/>
+
+    <aura:attribute name="parentObject" type="String" />
+    <aura:attribute name="parentObjects" type="List" />
+    <aura:attribute name="parentObjectLabel" type="String" />
+    <aura:attribute name="parentObjectMap" type="Map" />
+    
+    <aura:attribute name="childObject" type="String" />
+    <aura:attribute name="childObjects" type="List" />
+    <aura:attribute name="childObjectLabel" type="String" />
+    <aura:attribute name="childObjectMap" type="Map" />
+
+    <aura:attribute name="parentField" type="String" />
+    <aura:attribute name="parentFields" type="List" />
+    <aura:attribute name="parentFieldLabel" type="String" />
+    <aura:attribute name="parentFieldMap" type="Map" />
+
+    <aura:attribute name="childField" type="String" />
+    <aura:attribute name="childFields" type="List" />
+    <aura:attribute name="childFieldLabel" type="String" />
+    <aura:attribute name="childFieldMap" type="Map" />
+
+    <aura:attribute name="childObjectFieldLookupForParent" type="String" />
+    <aura:attribute name="childObjectFieldLookupsForParent" type="List" />
+    <aura:attribute name="lookupLabel" type="String" />
+    <aura:attribute name="lookupMap" type="Map" />
+
+    <aura:attribute name="aggregate" type="String" />
+    <aura:attribute name="aggregateFunctions" type="List" />
+
+    <aura:attribute name="IsSpinner" type="Boolean"/>
+
+    <div>
+        <aura:if isTrue="{!v.IsSpinner}">
+            <lightning:spinner style="background: none;" variant="brand" alternativeText="Loading" size="medium" />
+        </aura:if>
+    </div>
+        
+
+        <aura:renderIf isTrue="{!!v.isEdit}">
+        <table>
+            <tr>
+                <td>
+                    <lightning:select class="lightningSelectStyle" disabled="{!v.updateRecord}"  aura:id="parentObjectDropdown" name="Parent Object" label="Select Parent object :"
+                        value="{!v.parentObject}" required="true" onchange="{!c.handleParentObject}">
+                        <option value="Select an object" text="Select an object" />
+                        <aura:iteration items="{!v.parentObjects}" var="parentObject" >
+                            <option value="{!parentObject.value}" selected="{!v.parentObject != null &amp;&amp; parentObject.value==v.parentObject}" text="{!parentObject.key}" />
+                        </aura:iteration>
+                    </lightning:select>
+                </td>
+                <td>
+                    <lightning:select class="lightningSelectStyle" disabled="{!v.updateRecord}" aura:id="childObjectdDropdown" name="child Object" label="Select child object :"
+                        value="{!v.childObject}" required="true" onchange="{! c.handleChildObject}">
+                        <option value="Select an object" text="Select an object" />
+                        <aura:iteration items="{!v.childObjects}" var="childObject">
+                            <option value="{!childObject.value}" selected="{!v.childObject !=null &amp;&amp; childObject.value==v.childObject}" text="{!childObject.key}" />
+                        </aura:iteration>
+                    </lightning:select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <lightning:select class="lightningSelectStyle" aura:id="parentFielddDropdown" name="Parent Field" label="Select Parent Field :"
+                        value="{!v.parentField}" required="true" onchange="{!c.handleParentField}">
+                        <option value="Select a field" text="Select a field" />
+                        <option value="Id" text="Id" />
+                        <aura:iteration items="{!v.parentFields}" var="parentField">
+                            <option value="{!parentField.value}" selected="{!parentField.value==v.parentField}" text="{!parentField.key}" />
+                        </aura:iteration>
+                    </lightning:select>
+                </td>
+                <td>
+                    <lightning:select class="lightningSelectStyle" aura:id="childFielddDropdown" name="child Field" label="Select child Field :"
+                        value="{!v.childField}" required="true" onchange="{!c.handleChildField}">
+                        <option value="Select a field" text="Select a field" />
+                        <option value="Id" text="Id" />
+                        <aura:iteration items="{!v.childFields}" var="childField">
+                            <option value="{!childField.value}" selected="{!childField.value==v.childField}" text="{!childField.key}" />
+                        </aura:iteration>
+                    </lightning:select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <lightning:select class="lightningSelectStyle" aura:id="childObjectFieldLookupForParentDropdown" name="Parent Object" label="Select Child Object Field Lookup For Parent object :"
+                        value="{!v.childObjectFieldLookupForParent}" required="true" onchange="{!c.lookupFieldHandler}">
+                        <option value="Select a lookup" text="Select a lookup" />
+                        <aura:iteration items="{!v.childObjectFieldLookupsForParent}" var="name">
+                            <option value="{!name.value}" selected="{!name.value == v.childObjectFieldLookupForParent}" text="{!name.key}" />
+                        </aura:iteration>
+                    </lightning:select>
+                </td>
+                <td>
+                    <lightning:select class="lightningSelectStyle" aura:id="aggregation" name="Aggregate Function" label="Select Aggregate Function :"
+                        value="{!v.aggregate}" required="true" onchange="{!c.handleAggregate}">
+                        <option value="Select Any operation" text="Select Any operation" />
+                        <aura:iteration items="{!v.aggregateFunctions}" var="aggregateFunctionName">
+                            <option value="{!aggregateFunctionName.label}" selected="{!aggregateFunctionName.label==v.aggregate}" text="{!aggregateFunctionName.label}" />
+                        </aura:iteration>
+                    </lightning:select>
+                </td>
+            </tr>
+        </table>
+    
+    </aura:renderIf>
+    
+
+    
+</aura:component>
